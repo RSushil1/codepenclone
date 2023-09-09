@@ -6,14 +6,16 @@ const HomePage = () => {
         <div className='bg-gray-900 flex flex-col lg:flex-row'>
             {/* Left Sidebar */}
             <div className='lg:w-[30%] lg:h-screen bg-blue-900 text-white p-6'>
-                <div className='mb-6'>
+                <div className='mb-1 flex flex-row '>
                     <h1 className='text-4xl lg:text-5xl font-bold'>CodeMagic</h1>
+                </div>
+                <div>
                     <p  style={{ fontFamily: "'Dancing Script', 'Lobster', cursive, serif" }} className='mt-2 text-lg lg:text-xl'>Your Magical Code Editor</p>
                 </div>
                 <div className='mt-8'>
                     <NavLink
                         to="/code-editor"
-                        className='h-16 w-full bg-blue-600 text-white font-serif font-bold text-xl rounded-3xl shadow-lg flex items-center justify-center'
+                        className='h-16 w-full bg-blue-600 hover:bg-sky-400 text-white font-serif font-bold text-xl rounded-3xl shadow-lg flex items-center justify-center'
                     >
                         Start Coding!
                     </NavLink>
@@ -21,11 +23,19 @@ const HomePage = () => {
                 <div className='mt-5'>
                     <p className='text-lg lg:text-xl'>
                         Already have an account?{' '}
-                        <NavLink className='text-blue-400 hover:underline' href='/signin'>
+                        <NavLink className='text-blue-400 hover:underline' to='/signin'>
                             Sign In
                         </NavLink>
                     </p>
-                    <img className='h-64 w-64' src="images/coding.png" alt="CodeEditorImg" />
+                    <div>
+                    <button
+                        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 m-2 rounded"
+                    >
+                        Sign Up
+                    </button>
+                    <svg className='ms-2' xmlns="http://www.w3.org/2000/svg" id="visual-studio-code"><path fill="#0179cb" d="M17.172 29.664 5.215 38.981 0 36.384V12.1l5.195-2.617 11.874 9.338L35.869 0l12.368 4.927v38.528l-12.306 5.009ZM35.5 32.942V15.523l-11.255 8.72ZM5.628 29.808l5.916-5.38-5.916-5.9Z" data-name="visual studio code"></path></svg>
+                    </div>
+
                 </div>
             </div>
 
