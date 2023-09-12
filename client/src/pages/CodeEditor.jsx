@@ -63,7 +63,7 @@ const CodeEditor = () => {
             <div className='flex flex-col h-screen'>
                 <div className='h-[10%] w-screen flex flex-row bg-neutral-800'>
                     <div className='flex flex-row'>
-                        <svg className='ms-3 stroke-white' xmlns="http://www.w3.org/2000/svg" width="48.237" height="48.464" id="visual-studio-code"><path fill="#0179cb" d="M17.172 29.664 5.215 38.981 0 36.384V12.1l5.195-2.617 11.874 9.338L35.869 0l12.368 4.927v38.528l-12.306 5.009ZM35.5 32.942V15.523l-11.255 8.72ZM5.628 29.808l5.916-5.38-5.916-5.9Z" data-name="visual studio code"></path></svg>
+                        <svg className='ms-3 stroke-black' xmlns="http://www.w3.org/2000/svg" width="48.237" height="48.464" id="visual-studio-code"><path fill="#0179cb" d="M17.172 29.664 5.215 38.981 0 36.384V12.1l5.195-2.617 11.874 9.338L35.869 0l12.368 4.927v38.528l-12.306 5.009ZM35.5 32.942V15.523l-11.255 8.72ZM5.628 29.808l5.916-5.38-5.916-5.9Z" data-name="visual studio code"></path></svg>
                         <h1 className=' font-serif font-bold mt-3 ms-4 text-white'>Sushil Singh Rathore</h1>
                     </div>
                     <div>

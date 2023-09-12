@@ -1,12 +1,11 @@
-import userModel from "../models/userModel.js";
-import orderModel from "../models/orderModel.js";
-
+import userModel from "./../models/userModel.js";
 import { comparePassword, hashPassword } from "./../helpers/authHelper.js";
 import JWT from "jsonwebtoken";
 
 export const registerController = async (req, res) => {
   try {
-    const { name, email, password, phone, address, answer } = req.body;
+    const { name, email, password, question, answer } = req.body;
+    console.log(req.body)
     //validations
     if (!name) {
       return res.send({ error: "Name is Required" });
@@ -17,10 +16,7 @@ export const registerController = async (req, res) => {
     if (!password) {
       return res.send({ message: "Password is Required" });
     }
-    if (!phone) {
-      return res.send({ message: "Phone no is Required" });
-    }
-    if (!address) {
+    if (!question) {
       return res.send({ message: "Address is Required" });
     }
     if (!answer) {
@@ -41,9 +37,8 @@ export const registerController = async (req, res) => {
     const user = await new userModel({
       name,
       email,
-      phone,
-      address,
       password: hashedPassword,
+      question,
       answer,
     }).save();
 
