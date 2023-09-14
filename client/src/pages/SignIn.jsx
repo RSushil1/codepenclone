@@ -19,7 +19,7 @@ export default function SignIn() {
 
         if (res.data.success) {
             toast.success(res.data.message);
-            navigate('/');
+            navigate('/user-dashboard');
         } else {
             toast.error(res.data.message);
         }
