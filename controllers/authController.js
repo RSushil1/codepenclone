@@ -17,7 +17,7 @@ export const registerController = async (req, res) => {
       return res.send({ message: "Password is Required" });
     }
     if (!question) {
-      return res.send({ message: "Address is Required" });
+      return res.send({ message: "question is Required" });
     }
     if (!answer) {
       return res.send({ message: "Answer is Required" });

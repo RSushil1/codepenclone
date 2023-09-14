@@ -1,6 +1,33 @@
-import { NavLink } from "react-router-dom";
+import React, { useState } from 'react'
+import { toast } from 'react-toastify'
+import axios from 'axios'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 export default function SignIn() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const Host = "http://localhost:4000"
+
+  // form function
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+        const res = await axios.post(`${Host}/api/auth/login`, {
+           email, password
+        });
+
+        if (res.data.success) {
+            toast.success(res.data.message);
+            navigate('/');
+        } else {
+            toast.error(res.data.message);
+        }
+    } catch (error) {
+        toast.error('Server not responded!');
+    }
+};
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -12,7 +39,7 @@ export default function SignIn() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                 Email address
@@ -20,8 +47,10 @@ export default function SignIn() {
               <div className="mt-2">
                 <input
                   id="email"
-                  name="email"
                   type="email"
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -43,8 +72,11 @@ export default function SignIn() {
               <div className="mt-2">
                 <input
                   id="password"
-                  name="password"
                   type="password"
+                  name="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  
                   autoComplete="current-password"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

@@ -19,11 +19,13 @@ const Signup = () => {
         e.preventDefault();
         console.log(name)
         try {
-            const res = await axios.post(`${Host}/api/auth/register`, name,email,password,question,answer);
+            const res = await axios.post(`${Host}/api/auth/register`, {
+                name, email, password, question, answer
+            });
 
             if (res.data.success) {
                 toast.success(res.data.message);
-                navigate('/');
+                navigate('/signin');
             } else {
                 toast.error(res.data.message);
             }
@@ -116,12 +118,13 @@ const Signup = () => {
                                         autoComplete="question-name"
                                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                                     >
-                                        <option value={question}>What is your favorite childhood cartoon character?</option>
-                                        <option value={question}>In which city were you born?</option>
-                                        <option value={question}>What is your mother's maiden name?</option>
-                                        <option value={question}>What is the name of your first pet?</option>
-                                        <option value={question}>What is your fav colour?</option>
+                                        <option value="favoriteCartoon">What is your favorite childhood cartoon character?</option>
+                                        <option value="birthCity">In which city were you born?</option>
+                                        <option value="maidenName">What is your mother's maiden name?</option>
+                                        <option value="firstPetName">What is the name of your first pet?</option>
+                                        <option value="favoriteColor">What is your favorite color?</option>
                                     </select>
+
                                 </div>
                             </div>
                             <div>

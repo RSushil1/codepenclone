@@ -1,129 +1,60 @@
-// import React from 'react';
-// import { NavLink } from 'react-router-dom';
-
-// const HomePage = () => {
-//     return (
-//         <div className='bg-gray-900 flex flex-col lg:flex-row'>
-//             <div className='lg:w-[30%] lg:h-screen bg-blue-900 text-white p-6'>
-//                 <div className='mb-1 flex flex-row '>
-//                     <h1 className='text-4xl lg:text-5xl font-bold'>CodeMagic</h1>
-//                 </div>
-//                 <div>
-//                     <p style={{ fontFamily: "'Dancing Script', 'Lobster', cursive, serif" }} className='mt-2 text-lg lg:text-xl'>Your Magical Code Editor</p>
-//                 </div>
-//                 <div className='mt-8'>
-//                     <NavLink
-//                         to="/code-editor"
-//                         className='h-16 w-full bg-blue-600 hover:bg-sky-400 text-white font-serif font-bold text-xl rounded-3xl shadow-lg flex items-center justify-center'
-//                     >
-//                         Start Coding!
-//                     </NavLink>
-//                 </div>
-//                 <div className='mt-5'>
-//                     <p className='text-lg lg:text-xl'>
-//                         Already have an account?{' '}
-//                         <NavLink className='text-blue-400 hover:underline' to='/signin'>
-//                             Sign In
-//                         </NavLink>
-//                     </p>
-//                     <div>
-//                         <button
-//                             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 m-2 rounded"
-//                         >
-//                             <NavLink to='/signup'>
-//                                 Sign Up
-//                             </NavLink>
-//                         </button>
-//                         <svg className='ms-2' xmlns="http://www.w3.org/2000/svg" id="visual-studio-code"><path fill="#0179cb" d="M17.172 29.664 5.215 38.981 0 36.384V12.1l5.195-2.617 11.874 9.338L35.869 0l12.368 4.927v38.528l-12.306 5.009ZM35.5 32.942V15.523l-11.255 8.72ZM5.628 29.808l5.916-5.38-5.916-5.9Z" data-name="visual studio code"></path></svg>
-//                     </div>
-
-//                 </div>
-//             </div>
-
-//             {/* Main Content */}
-//             <div className='lg:w-[70%] flex flex-col justify-center items-center p-6'>
-//                 <h1 style={{ fontFamily: "'Dancing Script', 'Lobster', cursive, serif" }} className='text-4xl lg:text-6xl font-bold text-blue-800 mb-4 lg:mb-6 text-center'>
-//                     Welcome to CodeMagic
-//                 </h1>
-//                 <p style={{ fontFamily: "cursive, serif" }} className='text-base lg:text-xl text-gray-300 text-center'>
-//                     CodeMagic is your ultimate coding playground. Create, edit, and experiment
-//                     with HTML, CSS, and JavaScript like never before. With features like folder
-//                     management, integrated console, and live server, you can develop and view
-//                     your web projects seamlessly, just like in VS Code.
-//                 </p>
-
-
-//                 <div className='mt-6 lg:mt-8'>
-//                     {/* Replace this with your SVG code */}
-//                     <svg
-//                         xmlns='http://www.w3.org/2000/svg'
-//                         fill='none'
-//                         viewBox='0 0 24 24'
-//                         stroke='currentColor'
-//                         className='h-32 lg:h-52 w-32 lg:w-52 text-blue-400'
-//                     >
-//                         <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 823 823" viewBox="0 0 823 823" id="software-engineer"><path fill="#cce9ff" d="M563.1 81.9C476 24.5 353.6 36.1 276.6 121.3c-42.1 46.6-59.2 110.7-102.9 156.3-49.2 51.4-108 101.3-130.3 171.3-23.7 74.4-2.9 159.7 50.1 216.6 64.5 69.2 159.3 48.4 248.9 47.3C709.3 708.2 982 463.3 635 161.4c-29-25.4-43.1-60.6-71.9-79.5z" opacity=".63"></path><path fill="#0b4870" d="M727.5 121.6h-619c-12.4 0-22.5 10-22.5 22.4v426.3h664V144c0-12.4-10.1-22.4-22.5-22.4z"></path><path fill="#0e538c" d="M726.7 131H109.3c-7.7 0-13.9 6.2-13.9 13.9V564h645.2V144.9c0-7.7-6.2-13.9-13.9-13.9z"></path><path fill="#0b4870" d="M118.6 162h598.8v387.1H118.6z"></path><path fill="#f6f6f6" d="M421.4 148.4c0 1.9-1.5 3.4-3.4 3.4s-3.4-1.5-3.4-3.4 1.5-3.4 3.4-3.4c1.9.1 3.4 1.6 3.4 3.4z"></path><path fill="#ffbe55" d="M193.7 183.4h60V194h-60z"></path><path fill="#cce9ff" d="M139.5 183.4h24.7V194h-24.7zM139.5 202.8h24.7v10.6h-24.7zM139.5 225.8h24.7v10.6h-24.7zM139.5 248.7h24.7v10.6h-24.7zM139.5 271.7h24.7v10.6h-24.7zM139.5 294.6h24.7v10.6h-24.7zM266.1 183.4h201.3V194H266.1z"></path><path fill="#ffbe55" d="M214.9 202.8h60v10.6h-60z"></path><path fill="#cce9ff" d="M287.3 202.8h201.3v10.6H287.3z"></path><path fill="#ffbe55" d="M250.3 225.8h60v10.6h-60z"></path><path fill="#cce9ff" d="M322.7 225.8H524v10.6H322.7z"></path><path fill="#ffbe55" d="M285.6 248.7h60v10.6h-60z"></path><path fill="#cce9ff" d="M358 248.7h201.3v10.6H358z"></path><path fill="#ffbe55" d="M250.3 271.7h60v10.6h-60z"></path><path fill="#cce9ff" d="M322.7 271.7H630v10.6H322.7z"></path><path fill="#ffbe55" d="M214.9 294.6h60v10.6h-60z"></path><path fill="#cce9ff" d="M287.3 294.6H418v10.6H287.3z"></path><path fill="#ffbe55" d="M193.7 324.7h60v10.6h-60z" opacity=".4"></path><path fill="#cce9ff" d="M139.5 324.7h24.7v10.6h-24.7zM139.5 344.1h24.7v10.6h-24.7zM139.5 367.1h24.7v10.6h-24.7zM139.5 390h24.7v10.6h-24.7zM139.5 413h24.7v10.6h-24.7zM139.5 435.9h24.7v10.6h-24.7zM266.1 324.7h201.3v10.6H266.1z" opacity=".4"></path><path fill="#ffbe55" d="M214.9 344.1h60v10.6h-60z" opacity=".4"></path><path fill="#cce9ff" d="M287.3 344.1h201.3v10.6H287.3z" opacity=".4"></path><path fill="#ffbe55" d="M250.3 367.1h60v10.6h-60z" opacity=".4"></path><path fill="#cce9ff" d="M322.7 367.1H524v10.6H322.7z" opacity=".4"></path><path fill="#ffbe55" d="M193.7 465.9h60v10.6h-60z" opacity=".4"></path><path fill="#cce9ff" d="M139.5 465.9h24.7v10.6h-24.7zM139.5 485.4h24.7V496h-24.7zM139.5 508.3h24.7v10.6h-24.7zM266.1 465.9h201.3v10.6H266.1z" opacity=".4"></path><path fill="#ffbe55" d="M214.9 485.4h60V496h-60z" opacity=".4"></path><path fill="#cce9ff" d="M287.3 485.4h201.3V496H287.3z" opacity=".4"></path><path fill="#ffbe55" d="M250.3 508.3h60v10.6h-60z" opacity=".4"></path><path fill="#cce9ff" d="M322.7 508.3H524v10.6H322.7z" opacity=".4"></path><path fill="#ffbe55" d="M285.6 390h60v10.6h-60z" opacity=".4"></path><path fill="#cce9ff" d="M358 390h307.3v10.6H358z" opacity=".4"></path><path fill="#ffbe55" d="M250.3 413h60v10.6h-60z" opacity=".4"></path><path fill="#cce9ff" d="M322.7 413H524v10.6H322.7z" opacity=".4"></path><path fill="#ffbe55" d="M214.9 435.9h60v10.6h-60z" opacity=".4"></path><path fill="#cce9ff" d="M287.3 435.9h201.3v10.6H287.3z" opacity=".4"></path><path fill="#d3d3d3" d="M794.1 562.7H41.9c-4.3 0-7.9 3.5-7.9 7.9v10.2c0 4.3 3.5 7.9 7.9 7.9h752.3c4.3 0 7.9-3.5 7.9-7.9v-10.2c-.1-4.4-3.6-7.9-8-7.9z"></path><path fill="#f7f7f7" d="M482.5 574h-129c-1.7 0-3.1 1.4-3.1 3.1 0 1.7 1.4 3.1 3.1 3.1h129.1c1.7 0 3.1-1.4 3.1-3.1-.1-1.7-1.5-3.1-3.2-3.1z"></path><path fill="#0b4870" d="m588.6 675-.1 16.1s2 10.3 3.7 21.3c1.6 11 2.9 22.7 1.2 25.4-3.3 5.4-9.8 0-10.9-5.4-1.1-5.4-2.7-39.1-2.7-39.1l-1.1-21.7 9.9 3.4zM605 672.8l-2.5 14.5s-4.9 39.6-2.2 45.6 11.4 3.3 10.9-4.9c-.5-8.1 1.6-36.9 1.6-36.9l4.9-17.4-12.7-.9z"></path><path fill="#0b4870" d="m598.3 496.3-1.2 17.8 46 22.2c8.3 4.5 12.3 14.2 9.6 23.2l-31.8 118.3-15.8-5L619 564c1-6.7-3.6-12.9-10.3-14l-16.4-2.6-17.4-17.8 20.2 18.1c4.9 4.4 7.3 10.9 6.4 17.4L588.6 675l-14.3 3.6-6.4-108.1c-.5-6.9-5.1-12.7-11.6-14.8l-28.3-9c-4.5-2.7-7.3-7.6-7.5-12.9l1.2-38.1 76.6.6z"></path><path fill="#ffbe55" d="m518.7 536.2 7.6-147.8s31.4-1.9 40.8-1.9c5.1 0 13.8 2.4 20.7 4.6 6.5 2.1 11.8 1.9 15 7.9l51.5 98.8-31.7 3-10.6-12 5.4-8.1-19.3-45.4 3.8 82.5-83.2 18.4z"></path><path fill="#0f0f0f" d="M598.8 417.3 633 479l-10.6 12.5s-4.3.9-8.4-.5l-1.9-2.2 5.4-8.1-19.3-45.4.6-18z" opacity=".08"></path><path fill="#fff" d="M568.4 431.2c-10.4 0-29.4-27.1-29.4-37.5 0-2.1.4-4.1 1-6 9.7-.5 21.8-1.1 27.1-1.1 2.3 0 5.3.5 8.6 1.2.6 1.9 1 3.8 1 5.9-.1 10.4 2.1 37.5-8.3 37.5z"></path><path fill="#0f0f0f" d="m522.5 414-3.8 123.1 50.8-12.2z" opacity=".08"></path><path fill="#fcd2b1" d="M570.2 371.4c-.9 1.8-7.1 26-7.1 26s-2.2 4-7.5 3.5c-5.3-.4-7.5-7.9-7.5-7.9l9.3-30.4 12.8 8.8z"></path><path fill="#ffbcc6" d="M537.6 356.5c0 16.7 17.7 35.2 34.4 35.2s26-18.5 26-35.2c0-16.7-13.5-30.2-30.2-30.2-16.7-.1-30.2 13.5-30.2 30.2z"></path><circle cx="568.5" cy="358.9" r="34" fill="#ffe3ca" transform="rotate(-9.259 568.625 358.984)"></circle><path fill="#ffe3ca" d="M562.1 522c1.3-.4 12.5-5.9 20.4-5.9 7.9 0 17.6 8.4 17.6 8.4s1.3 4.4-4 3.5c-5.3-.9.7 3.3.7 3.3s-.3.2-6.5 1.1c-6.2.9-30.2-.4-30.2-.4l2-10z"></path><path fill="#ffbe55" d="m526.3 388.5-4.3 97.2 40 36.2-1.9 10.2-56.3-30.1c-5.4-2.9-8.5-8.9-7.7-15l10.3-74.4c.8-9.3 6.5-17.5 14.8-21.6l5.1-2.5zM558 540.4h101.8v-7.5H558c-2.1 0-3.7 1.7-3.7 3.7-.1 2.1 1.6 3.8 3.7 3.8z"></path><path fill="#ffbe55" d="M585.9 540.4h98.2c4.3 0 8.1-2.9 9.3-7.1l17.3-65.3c1.6-6.1-3-12-9.3-12h-85.7c-4.3 0-8.1 2.9-9.3 7.1l-20.5 77.3z"></path><path fill="#fff" d="M585.9 540.4h98.2c4.3 0 8.1-2.9 9.3-7.1l17.3-65.3c1.6-6.1-3-12-9.3-12h-85.7c-4.3 0-8.1 2.9-9.3 7.1l-20.5 77.3z" opacity=".22"></path><path fill="#fff" d="M643.7 504c-1.1 4.3 1.6 7.7 6 7.7s8.8-3.5 9.9-7.7c1.1-4.3-1.6-7.7-6-7.7-4.4-.1-8.8 3.4-9.9 7.7z"></path><path fill="#2a94f4" d="M568.5 324.9c17.5 0 31.8 13.2 33.8 30.1-5.9 4.4-13.6 6.3-20.9 5.1-8.6-1.5-16.3-7.4-19.9-15.3.3 3.8.5 7.6-.1 11.3-.6 3.7-2.2 7.4-5.2 9.8-.2-2.6-.5-5.4-1.8-7.7-1.4-2.3-4.3-3.9-6.7-2.9-1.8.7-2.9 2.5-3.2 4.4-.3 1.9.2 3.8.9 5.6 1.1 2.8 2.7 5.4 4.7 7.5-4 .6-8.3 1.1-12.3.7-2.1-4.5-3.4-9.4-3.4-14.7 0-18.7 15.3-33.9 34.1-33.9z"></path><path fill="#ffe3ca" d="M539.2 364.5c0 5.7 4.6 10.3 10.3 10.3 5.7 0 10.3-4.6 10.3-10.3s-4.6-10.3-10.3-10.3c-5.6 0-10.3 4.6-10.3 10.3zM605 672.8l-1.8 10.9 10.8 3.4 3-10.7zM588.5 687.1l-9 1.7-.5-11.4 9.6-2.4z"></path><circle cx="549.5" cy="325.4" r="15.2" fill="#2a94f4"></circle></svg>
-//                     </svg>
-//                 </div>
-//             </div>
-//         </div >
-//     );
-// };
-
-// export default HomePage;
+import React from 'react';
+import { NavLink } from "react-router-dom";
 
 export default function HomePage() {
-    return (
-      <div className="bg-white">
-        <div className="mx-auto max-w-7xl py-24 sm:px-6 sm:py-32 lg:px-8">
-          <div className="relative isolate overflow-hidden bg-gray-900 px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
-            <svg
-              viewBox="0 0 1024 1024"
-              className="absolute left-1/2 top-1/2 -z-10 h-[64rem] w-[64rem] -translate-y-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] sm:left-full sm:-ml-80 lg:left-1/2 lg:ml-0 lg:-translate-x-1/2 lg:translate-y-0"
-              aria-hidden="true"
+  return (
+    <div >
+      <div className="relative isolate h-screen overflow-hidden bg-gray-900 px-6 pt-16 shadow-2xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
+        <svg
+          viewBox="0 0 1024 1024"
+          className="absolute left-1/2 top-1/2 -z-10 h-[64rem] w-[64rem] -translate-y-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] sm:left-full sm:-ml-80 lg:left-1/2 lg:ml-0 lg:-translate-x-1/2 lg:translate-y-0"
+          aria-hidden="true"
+        >
+          <circle cx={512} cy={512} r={512} fill="url(#759c1415-0410-454c-8f7c-9a820de03641)" fillOpacity="0.7" />
+          <defs>
+            <radialGradient id="759c1415-0410-454c-8f7c-9a820de03641">
+              <stop stopColor="#7775D6" />
+              <stop offset={1} stopColor="#E935C1" />
+            </radialGradient>
+          </defs>
+        </svg>
+        <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
+          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            Boost your productivity.
+            <br />
+            Start using CodeMagic today.
+          </h2>
+          <p className="mt-6 text-lg leading-8 text-gray-300">
+            CodeMagic is your ultimate coding playground. Create, edit, and experiment
+            with HTML, CSS, and JavaScript like never before. With features like folder
+            management, integrated console, and live server, you can develop and view
+            your web projects seamlessly, just like in VS Code.
+          </p>
+          <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
+            <NavLink
+              to="/code-editor"
+              className="rounded-md bg-white hover:bg-blue-500 hover:text-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
-              <circle cx={512} cy={512} r={512} fill="url(#759c1415-0410-454c-8f7c-9a820de03641)" fillOpacity="0.7" />
-              <defs>
-                <radialGradient id="759c1415-0410-454c-8f7c-9a820de03641">
-                  <stop stopColor="#7775D6" />
-                  <stop offset={1} stopColor="#E935C1" />
-                </radialGradient>
-              </defs>
-            </svg>
-            <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
-              <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                Boost your productivity.
-                <br />
-                Start using our app today.
-              </h2>
-              <p className="mt-6 text-lg leading-8 text-gray-300">
-                Ac euismod vel sit maecenas id pellentesque eu sed consectetur. Malesuada adipiscing sagittis vel nulla.
-              </p>
-              <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
-                <a
-                  href="#"
-                  className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                >
-                  Get started
-                </a>
-                <a href="#" className="text-sm font-semibold leading-6 text-white">
-                  Learn more <span aria-hidden="true">→</span>
-                </a>
-              </div>
-            </div>
-            <div className="relative mt-16 h-80 lg:mt-8">
-              {/* <img
-                className="absolute left-0 top-0 w-[57rem] max-w-none rounded-md bg-white/5 ring-1 ring-white/10"
-                src="https://tailwindui.com/img/component-images/dark-project-app-screenshot.png"
-                alt="App screenshot"
-                width={1824}
-                height={1080}
-              /> */}
-            </div>
+              Get started
+            </NavLink>
+            <p className='text-lg lg:text-xl text-white'>
+              Already have an account?{' '}
+              <NavLink className="text-lg font-bold leading-6 text-blue-600" to='/signin'>
+                Sign In <span aria-hidden="true">→</span>
+              </NavLink>
+            </p>
           </div>
         </div>
+        <div className="relative mt-16 h-80 lg:mt-8">
+          <img
+            className="absolute left-0 top-0 w-[50rem] max-w-none rounded-md bg-white/5 ring-1 ring-white/10"
+            src="/images/Screenshot.png"
+            alt="App screenshot"
+          />
+        </div>
       </div>
-    )
-  }
-  
+    </div>
+  )
+}
+
 
