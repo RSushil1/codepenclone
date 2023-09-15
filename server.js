@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoute.js";
+import repoRoutes from "./routes/repoRoute.js";
 import cors from "cors";
 // import path from 'path';
 // import {fileURLToPath} from 'url';
@@ -26,6 +27,7 @@ app.use(express.json());
 
 //routes
 app.use("/api/auth", authRoutes);
+app.use("/api/repo", repoRoutes);
 
 
 // //rest api

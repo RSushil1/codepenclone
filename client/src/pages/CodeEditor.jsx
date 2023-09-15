@@ -123,7 +123,7 @@ const CodeEditor = () => {
                         </div>
                     </div>
                 </div>
-                <div className='h-[8%] w-screen flex flex-row bg-neutral-800'>
+                <div className='h-[8%] w-screen flex flex-row bg-gray-800'>
                     <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-5 m-2 rounded"
                         onClick={handleRunCode}

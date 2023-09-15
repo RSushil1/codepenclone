@@ -1,0 +1,44 @@
+import express from "express";
+import {
+  createRepoController,
+  getRepoController,
+  deleteRepoController,
+  getSingleRepoController,
+  searchRepoController,
+  updateRepoController,
+  RepoListController
+} from "../controllers/repoController.js";
+import {requireSignIn } from "../middlewares/authMiddleware.js";
+
+const router = express.Router();
+
+//routes
+router.post(
+  "/create-Repo",
+  requireSignIn,
+  createRepoController
+);
+//routes
+router.put(
+  "/update-Repo/:pid",
+  requireSignIn,
+  updateRepoController
+);
+
+//get Repos
+router.get("/get-Repo", getRepoController);
+
+//single Repo
+router.get("/get-Repo/:rid", getSingleRepoController);
+
+//delete Repo
+router.delete("/delete-Repo/:rid", deleteRepoController);
+
+
+//Repo per page
+router.get("/Repo-list/:page", RepoListController);
+
+//search Repo
+router.get("/search/:keyword", searchRepoController);
+
+export default router;
