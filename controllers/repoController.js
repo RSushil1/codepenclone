@@ -4,7 +4,7 @@ dotenv.config();
 
 export const createRepoController = async (req, res) => {
     try {
-        const { name, description, HTML, CSS, JS } = req.fields;
+        const { name, description, HTML, CSS, JS } = req.body;
         //Validation
         switch (true) {
             case !name:
@@ -24,7 +24,7 @@ export const createRepoController = async (req, res) => {
         res.status(500).send({
             success: false,
             error,
-            message: "Error in crearing Repo",
+            message: "Error in creating Repo",
         });
     }
 };
@@ -32,16 +32,14 @@ export const createRepoController = async (req, res) => {
 //get all Repos
 export const getRepoController = async (req, res) => {
     try {
-        const Repos = await RepoModel
+        const Repos = await repoModel
             .find({})
-            .populate("category")
-            .select("-photo")
             .limit(12)
             .sort({ createdAt: -1 });
         res.status(200).send({
             success: true,
             counTotal: Repos.length,
-            message: "All Repos ",
+            message: "All Repos Fetched",
             Repos,
         });
     } catch (error) {
@@ -68,23 +66,6 @@ export const getSingleRepoController = async (req, res) => {
         res.status(500).send({
             success: false,
             message: "Eror while getitng single Repo",
-            error,
-        });
-    }
-};
-
-// get photo
-export const RepoPhotoController = async (req, res) => {
-    try {
-        const Repo = await RepoModel.findById(req.params.pid).select("photo");
-        if (Repo.photo.data) {
-            res.set("Content-type", Repo.photo.contentType);
-            return res.status(200).send(Repo.photo.data);
-        }
-    } catch (error) {
-        res.status(500).send({
-            success: false,
-            message: "Erorr while getting photo",
             error,
         });
     }
@@ -179,7 +160,7 @@ export const RepoFiltersController = async (req, res) => {
 // Repo count
 export const RepoCountController = async (req, res) => {
     try {
-        const total = await RepoModel.find({}).estimatedDocumentCount();
+        const total = await repoModel.find({}).estimatedDocumentCount();
         res.status(200).send({
             success: true,
             total,
@@ -196,11 +177,10 @@ export const RepoCountController = async (req, res) => {
 // Repo list base on page
 export const RepoListController = async (req, res) => {
     try {
-        const perPage = 9;
+        const perPage = 12;
         const page = req.params.page ? req.params.page : 1;
-        const Repos = await RepoModel
+        const Repos = await repoModel
             .find({})
-            .select("-photo")
             .skip((page - 1) * perPage)
             .limit(perPage)
             .sort({ createdAt: -1 });
@@ -264,69 +244,4 @@ export const realtedRepoController = async (req, res) => {
     }
 };
 
-// get prdocyst by catgory
-export const RepoCategoryController = async (req, res) => {
-    try {
-        const category = await categoryModel.findOne({ slug: req.params.slug });
-        const Repos = await RepoModel.find({ category }).populate("category");
-        res.status(200).send({
-            success: true,
-            category,
-            Repos,
-        });
-    } catch (error) {
-        res.status(400).send({
-            success: false,
-            error,
-            message: "Error While Getting Repos",
-        });
-    }
-};
 
-//payment gateway api
-//token
-export const braintreeTokenController = async (req, res) => {
-    try {
-        gateway.clientToken.generate({}, function (err, response) {
-            if (err) {
-                res.status(500).send(err);
-            } else {
-                res.send(response);
-            }
-        });
-    } catch (error) {
-    }
-};
-
-//payment
-export const brainTreePaymentController = async (req, res) => {
-    try {
-        const { nonce, cart } = req.body;
-        let total = 0;
-        cart.map((i) => {
-            total += i.price;
-        });
-        let newTransaction = gateway.transaction.sale(
-            {
-                amount: total,
-                paymentMethodNonce: nonce,
-                options: {
-                    submitForSettlement: true,
-                },
-            },
-            function (error, result) {
-                if (result) {
-                    const order = new orderModel({
-                        Repos: cart,
-                        payment: result,
-                        buyer: req.user._id,
-                    }).save();
-                    res.json({ ok: true });
-                } else {
-                    res.status(500).send(error);
-                }
-            }
-        );
-    } catch (error) {
-    }
-};

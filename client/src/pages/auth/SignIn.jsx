@@ -26,7 +26,7 @@ export default function SignIn() {
           user: res.data.user,
           token: res.data.token,
         });
-        localStorage.setItem("auth", JSON.stringify(res.data));
+        localStorage.setItem("CodeMagic", JSON.stringify(res.data));
         navigate('/user-dashboard');
       } else {
         toast.error(res.data.message);

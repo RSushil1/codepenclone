@@ -1,16 +1,12 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { UseAuth } from '../context/auth'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import CreateRepoModal from '../components/CreateRepoModal'
+import { toast } from 'react-toastify'
+import axios from 'axios'
 
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
 const navigation = [
   { name: 'Dashboard', href: '#', current: true }
 ]
@@ -19,28 +15,76 @@ const userNavigation = [
   { name: 'Settings', href: '#' },
   { name: 'Sign out', href: '#' },
 ]
-const repos = [
-  { name: 'Your Profile', description: '#' },
-  { name: 'Your Profile', description: '#' },
-  { name: 'Your Profile', description: '#' },
-  { name: 'Your Profile', description: '#' },
-  { name: 'Your Profile', description: '#' },
-  { name: 'Your Profile', description: '#' },
-  { name: 'Your Profile', description: '#' },
-  { name: 'Your Profile', description: '#' },
-  { name: 'Your Profile', description: '#' }
-]
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Dashboard() {
   const [auth] = UseAuth();
+  const [openCreateRepo,setOpenCreateRepo] = useState(false);
+  const [repos, setRepos] = useState();
+  const [loading ,setLoading] = useState(false);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const navigate = useNavigate();
+  const Host = "http://localhost:4000"
+
+  const getAllRepos = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(`${Host}/api/repo/repo-list/${page}`);
+      setRepos(data.Repos);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  //getTotal COunt
+  const getTotal = async () => {
+    try {
+      const { data } = await axios.get(`${Host}/api/repo/repo-count`);
+      setTotal(data?.total);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (page === 1) return;
+    loadMore();
+  }, [page]);
+  //load more
+  const loadMore = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(`${Host}/api/v1/repo/repo-list/${page}`);
+      setLoading(false);
+      setRepos([...repos, ...data?.Repos]);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(()=>{
+    getAllRepos();
+    getTotal();
+  },[auth])
 
   // const handleRepoClick=(value){
 
   // }
+  const handleNewFile= ()=>{
+    setOpenCreateRepo(true)
+  }
+
+  const handleLogout = ()=>{
+    localStorage.setItem('CodeMagic','');
+    toast.success("Logout successfully")
+    navigate('/')
+  }
   return (
     <>
       <div className="min-h-full">
@@ -96,7 +140,7 @@ export default function Dashboard() {
                               <Menu.Item key="profile">
                                 {({ active }) => (
                                   <NavLink
-
+                                    onClick={handleNewFile}
                                     className={classNames(
                                       active ? 'bg-gray-100' : '',
                                       'block px-4 py-2 text-sm text-gray-700'
@@ -130,7 +174,7 @@ export default function Dashboard() {
                           <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                             <span className="absolute -inset-1.5" />
                             <span className="sr-only">Open user menu</span>
-                            <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
+                            <img className="h-8 w-8 rounded-full" src="/images/coding.png" alt="" />
                           </Menu.Button>
                         </div>
                         <Transition
@@ -160,7 +204,7 @@ export default function Dashboard() {
                             <Menu.Item key="logout">
                               {({ active }) => (
                                 <NavLink
-                                  to="/"
+                                  onClick={handleLogout}
                                   className={classNames(
                                     active ? 'bg-gray-100' : '',
                                     'block px-4 py-2 text-sm text-gray-700'
@@ -210,11 +254,11 @@ export default function Dashboard() {
                 <div className="border-t border-gray-700 pb-3 pt-4">
                   <div className="flex items-center px-5">
                     <div className="flex-shrink-0">
-                      <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
+                      <img className="h-10 w-10 rounded-full" src="/images/coding.png" alt="user" />
                     </div>
                     <div className="ml-3">
-                      <div className="text-base font-medium leading-none text-white">{auth?.user.name}</div>
-                      <div className="text-sm font-medium leading-none text-gray-400">{auth?.user.email}</div>
+                      <div className="text-base font-medium leading-none text-white">{auth?.user?.name}</div>
+                      <div className="text-sm font-medium leading-none text-gray-400">{auth?.user?.email}</div>
                     </div>
                     <button
                       type="button"
@@ -242,23 +286,40 @@ export default function Dashboard() {
             </>
           )}
         </Disclosure>
-        <CreateRepoModal/>
+        <CreateRepoModal openCreateRepo={openCreateRepo}/>
         <main className="bg-gray-200 h-screen">
-          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {repos.map((repo) => (
-                <div
-                  key={repo.id}
-                  className="bg-white hover:bg-red-300 p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:scale-105 cursor-pointer"
-                // onClick={() => handleRepoClick(repo.id)}
-                >
-                  <h2 className="text-xl font-semibold">{repo.name}</h2>
-                  <p className="text-gray-600 mt-2">{repo.description}</p>
-                </div>
-              ))}
-            </div>
+        <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {repos?.map((repo) => (
+              <div
+                key={repo.id}
+                className="bg-white hover:bg-red-300 p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:scale-105 cursor-pointer"
+              >
+                <h2 className="text-xl font-semibold">{repo.name}</h2>
+                <p className="text-gray-600 mt-2">{repo.description}</p>
+              </div>
+            ))}
           </div>
-        </main>
+          {repos && repos.length < total && (
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setPage(page + 1);
+                  }}
+                >
+                  {loading ? (
+                    "Loading ..."
+                  ) : (
+                    <>
+                      {" "}
+                      Loadmore
+                    </>
+                  )}
+                </button>
+              )}
+        </div>
+      </main>
 
       </div>
     </>

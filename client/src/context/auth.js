@@ -13,7 +13,7 @@ const AuthProvider = ({children}) => {
   axios.defaults.headers.common["Authorization"] = auth?.token;
 
     useEffect(()=>{
-       const data = localStorage.getItem('auth');
+       const data = localStorage.getItem('CodeMagic');
        if(data){
          const parseData = JSON.parse(data);
          setAuth({
