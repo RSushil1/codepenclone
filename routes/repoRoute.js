@@ -6,7 +6,8 @@ import {
   getSingleRepoController,
   searchRepoController,
   updateRepoController,
-  RepoListController
+  RepoListController,
+  RepoCountController
 } from "../controllers/repoController.js";
 import {requireSignIn } from "../middlewares/authMiddleware.js";
 
@@ -37,6 +38,9 @@ router.delete("/delete-Repo/:rid", deleteRepoController);
 
 //Repo per page
 router.get("/Repo-list/:page", RepoListController);
+
+//Repo per page
+router.get("/Repo-count", RepoCountController);
 
 //search Repo
 router.get("/search/:keyword", searchRepoController);

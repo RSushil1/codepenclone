@@ -21,9 +21,9 @@ function classNames(...classes) {
 
 export default function Dashboard() {
   const [auth] = UseAuth();
-  const [openCreateRepo,setOpenCreateRepo] = useState(false);
+  const [openCreateRepo, setOpenCreateRepo] = useState(false);
   const [repos, setRepos] = useState();
-  const [loading ,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ export default function Dashboard() {
   const loadMore = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`${Host}/api/v1/repo/repo-list/${page}`);
+      const { data } = await axios.get(`${Host}/api/repo/repo-list/${page}`);
       setLoading(false);
       setRepos([...repos, ...data?.Repos]);
     } catch (error) {
@@ -68,20 +68,20 @@ export default function Dashboard() {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     getAllRepos();
     getTotal();
-  },[auth])
+  }, [auth])
 
   // const handleRepoClick=(value){
 
   // }
-  const handleNewFile= ()=>{
+  const handleNewFile = () => {
     setOpenCreateRepo(true)
   }
 
-  const handleLogout = ()=>{
-    localStorage.setItem('CodeMagic','');
+  const handleLogout = () => {
+    localStorage.setItem('CodeMagic', '');
     toast.success("Logout successfully")
     navigate('/')
   }
@@ -147,7 +147,7 @@ export default function Dashboard() {
                                     )}
                                   >
                                     new file
-                                
+
                                   </NavLink>
                                 )}
                               </Menu.Item>
@@ -286,40 +286,42 @@ export default function Dashboard() {
             </>
           )}
         </Disclosure>
-        <CreateRepoModal openCreateRepo={openCreateRepo}/>
-        <main className="bg-gray-200 h-screen">
-        <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {repos?.map((repo) => (
-              <div
-                key={repo.id}
-                className="bg-white hover:bg-red-300 p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:scale-105 cursor-pointer"
-              >
-                <h2 className="text-xl font-semibold">{repo.name}</h2>
-                <p className="text-gray-600 mt-2">{repo.description}</p>
-              </div>
-            ))}
-          </div>
-          {repos && repos.length < total && (
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setPage(page + 1);
-                  }}
+        <CreateRepoModal openCreateRepo={openCreateRepo} />
+        <main className="bg-gray-200">
+          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {repos?.map((repo) => (
+                <div
+                  key={repo.id}
+                  className="bg-white hover:bg-red-300 p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:scale-105 cursor-pointer"
                 >
-                  {loading ? (
-                    "Loading ..."
-                  ) : (
-                    <>
-                      {" "}
-                      Loadmore
-                    </>
-                  )}
-                </button>
-              )}
-        </div>
-      </main>
+                  <h2 className="text-xl font-semibold">{repo.name}</h2>
+                  <p className="text-gray-600 mt-2">{repo.description}</p>
+                </div>
+              ))}
+            </div>
+            {repos && repos.length < total && (
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPage(page + 1);
+                }}
+              >
+                {loading ? (
+                  <div className="flex justify-center items-center h-[50vh]">
+                    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+                  </div>
+                ) : (
+                  <>
+                    {" "}
+                    Loadmore
+                  </>
+                )}
+              </button>
+            )}
+          </div>
+        </main>
 
       </div>
     </>

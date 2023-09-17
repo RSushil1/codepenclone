@@ -9,7 +9,7 @@ const Spinner = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             setCount((preValue) => --preValue);
-        }, 100000);
+        }, 1000);
         count === 0 && navigate('/', {
             state: location.pathname
         });
