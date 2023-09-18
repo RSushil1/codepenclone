@@ -74,7 +74,6 @@ const Signup = () => {
                                 className="px-4 py-2 rounded-md border border-gray-300 placeholder-gray-400 focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50 focus:border-indigo-600 text-gray-900 text-sm leading-5"
                             />
                         </div>
-                        {/* ...Repeat similar changes for other input fields */}
                         <div className="flex flex-row space-x-4">
                             <div className="flex-1">
                                 <label

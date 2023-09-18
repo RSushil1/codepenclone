@@ -6,6 +6,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import CreateRepoModal from '../components/CreateRepoModal'
 import { toast } from 'react-toastify'
 import axios from 'axios'
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 
 const navigation = [
   { name: 'Dashboard', href: '#', current: true }
@@ -29,6 +30,10 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const Host = "http://localhost:4000"
 
+  const itemsPerPage = 6;
+  const totalPages = Math.ceil(total / itemsPerPage);
+
+
   const getAllRepos = async () => {
     try {
       setLoading(true);
@@ -40,7 +45,7 @@ export default function Dashboard() {
       console.log(error);
     }
   };
-
+  
   //getTotal COunt
   const getTotal = async () => {
     try {
@@ -72,6 +77,19 @@ export default function Dashboard() {
     getAllRepos();
     getTotal();
   }, [auth])
+
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage(page + 1);
+    }
+  };
+  
+  const handlePrevPage = () => {
+    if (page > 1) {
+      setPage(page - 1);
+    }
+  };
+  
 
   // const handleRepoClick=(value){
 
@@ -301,24 +319,43 @@ export default function Dashboard() {
               ))}
             </div>
             {repos && repos.length < total && (
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setPage(page + 1);
-                }}
+              <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+              <a
+                href="#"
+                onClick={handlePrevPage}
+                className={`relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0 ${
+                  page === 1 ? 'cursor-not-allowed pointer-events-none' : ''
+                }`}
               >
-                {loading ? (
-                  <div className="flex justify-center items-center h-[50vh]">
-                    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
-                  </div>
-                ) : (
-                  <>
-                    {" "}
-                    Loadmore
-                  </>
-                )}
-              </button>
+                <span className="sr-only">Previous</span>
+                <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+              </a>
+              {Array.from({ length: totalPages }).map((_, index) => (
+                <a
+                  key={index + 1}
+                  href="#"
+                  onClick={() => setPage(index + 1)}
+                  className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${
+                    page === index + 1 ? 'bg-indigo-600 text-white' : ''
+                  }`}
+                >
+                  {index + 1}
+                </a>
+              ))}
+              <a
+                href="#"
+                onClick={handleNextPage}
+                className={`relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0 ${
+                  page === totalPages ? 'cursor-not-allowed pointer-events-none' : ''
+                }`}
+              >
+                <span className="sr-only">Next</span>
+                <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+              </a>
+            </nav>
+
+            
+            
             )}
           </div>
         </main>

@@ -11,16 +11,21 @@ const repoSchema = new mongoose.Schema(
       required: true,
     },
     HTML: {
-      type: String
+      type: String,
     },
     CSS: {
-      type: String
+      type: String,
     },
     JS: {
-      type: String
+      type: String,
+    },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users", 
+      required: true,
     },
   },
   { timestamps: true }
 );
 
-export default mongoose.model("repo", repoSchema);
+export default mongoose.model("Repo", repoSchema);

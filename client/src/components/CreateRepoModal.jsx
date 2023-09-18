@@ -4,26 +4,30 @@ import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { UseAuth } from '../context/auth';
 
 export default function CreateRepoModal(props) {
     const [open, setOpen] = useState(false);
     const [name, setName] = useState();
     const [description, setDescription] = useState();
-    const [auth,setAuth]=useState();
+    const [auth,setAuth]=UseAuth();
+    const owner = auth?.user._id;
     const Host = "http://localhost:4000"
 
     useEffect(() => {
         setOpen(props.openCreateRepo)
-    }, [props])
+    }, [props]);
+
 
     const handleCreateRepo = async (e) => {
         e.preventDefault();
         try {
             const res =await axios.post(`${Host}/api/repo/create-Repo`,
-                { name, description }
+                { name, description, owner }
             );
             if (res.data.success) {
                 toast.success(res.data.message);
+                setOpen(false)
                 setAuth({
                     ...auth,
                     user: {
@@ -31,8 +35,7 @@ export default function CreateRepoModal(props) {
                         repo: res.data.repo
                     }
                 });
-                console.log(auth)
-                setOpen(false)
+              
             } else {
                 toast.error(res?.data.message);
             }
@@ -47,7 +50,8 @@ export default function CreateRepoModal(props) {
 
     return (
         <Transition.Root show={open} as={Fragment}>
-            <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
+           <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={() => setOpen(false)}>
+
                 <Transition.Child
                     as={Fragment}
                     enter="ease-out duration-300"

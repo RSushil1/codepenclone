@@ -4,16 +4,18 @@ dotenv.config();
 
 export const createRepoController = async (req, res) => {
     try {
-        const { name, description, HTML, CSS, JS } = req.body;
+        const { name, description,owner, HTML, CSS, JS } = req.body;
         //Validation
         switch (true) {
             case !name:
                 return res.status(500).send({ error: "Name is Required" });
             case !description:
                 return res.status(500).send({ error: "Description is Required" });
+            case !owner:
+                return res.status(500).send({ error: "Owner is Required" });
 
         }
-        const repo = new repoModel({ name, description, HTML, CSS, JS });
+        const repo = new repoModel({ name, description,owner, HTML, CSS, JS });
         await repo.save();
         res.status(201).send({
             success: true,
