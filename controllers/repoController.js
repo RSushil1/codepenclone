@@ -4,7 +4,7 @@ dotenv.config();
 
 export const createRepoController = async (req, res) => {
     try {
-        const { name, description,owner, HTML, CSS, JS } = req.body;
+        const { name, description, owner, HTML, CSS, JS } = req.body;
         //Validation
         switch (true) {
             case !name:
@@ -15,7 +15,7 @@ export const createRepoController = async (req, res) => {
                 return res.status(500).send({ error: "Owner is Required" });
 
         }
-        const repo = new repoModel({ name, description,owner, HTML, CSS, JS });
+        const repo = new repoModel({ name, description, owner, HTML, CSS, JS });
         await repo.save();
         res.status(201).send({
             success: true,
@@ -179,13 +179,19 @@ export const RepoCountController = async (req, res) => {
 // Repo list base on page
 export const RepoListController = async (req, res) => {
     try {
-        const perPage = 12;
+        const limit = 9;
         const page = req.params.page ? req.params.page : 1;
+        const startIndex = (page - 1) * limit;
+        const endIndex = limit;
+        const options = {
+            // sort returned documents in ascending order by date created
+            sort: { createdAt: -1 },
+            projection: { _id: 1, name: 1, description: 1 },
+        };
         const Repos = await repoModel
-            .find({})
-            .skip((page - 1) * perPage)
-            .limit(perPage)
-            .sort({ createdAt: -1 });
+            .find(options)
+            .skip(startIndex)
+            .limit(endIndex);
         res.status(200).send({
             success: true,
             Repos,

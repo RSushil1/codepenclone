@@ -1,366 +1,277 @@
-import { Fragment, useEffect, useState } from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { UseAuth } from '../context/auth'
-import { NavLink, useNavigate } from 'react-router-dom'
-import CreateRepoModal from '../components/CreateRepoModal'
-import { toast } from 'react-toastify'
-import axios from 'axios'
+import React, { useState } from 'react';
+import { Disclosure, Menu, Transition } from '@headlessui/react';
+import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
+import CreateRepoModal from './../components/CreateRepoModal';
+import { NavLink } from 'react-router-dom';
 
-const navigation = [
-  { name: 'Dashboard', href: '#', current: true }
-]
-const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
-]
+const user = {
+  name: 'Tom Cook',
+  email: 'tom@example.com',
+  imageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+};
+
+const repositories = [
+  {
+    name: 'Repository 1',
+    description: 'Description for Repository 1',
+    codeEditorLink: 'link-to-repo-1',
+  },
+  {
+    name: 'Repository 2',
+    description: 'Description for Repository 2',
+    codeEditorLink: 'link-to-repo-2',
+  },
+  {
+    name: 'Repository 2',
+    description: 'Description for Repository 2',
+    codeEditorLink: 'link-to-repo-2',
+  },
+  {
+    name: 'Repository 2',
+    description: 'Description for Repository 2',
+    codeEditorLink: 'link-to-repo-2',
+  },
+  {
+    name: 'Repository 2',
+    description: 'Description for Repository 2',
+    codeEditorLink: 'link-to-repo-2',
+  },
+  {
+    name: 'Repository 2',
+    description: 'Description for Repository 2',
+    codeEditorLink: 'link-to-repo-2',
+  },
+  {
+    name: 'Repository 2',
+    description: 'Description for Repository 2',
+    codeEditorLink: 'link-to-repo-2',
+  },
+  {
+    name: 'Repository 2',
+    description: 'Description for Repository 2',
+    codeEditorLink: 'link-to-repo-2',
+  },
+  {
+    name: 'Repository 2',
+    description: 'Description for Repository 2',
+    codeEditorLink: 'link-to-repo-2',
+  },
+  {
+    name: 'Repository 2',
+    description: 'Description for Repository 2',
+    codeEditorLink: 'link-to-repo-2',
+  },
+  {
+    name: 'Repository 2',
+    description: 'Description for Repository 2',
+    codeEditorLink: 'link-to-repo-2',
+  },
+  {
+    name: 'Repository 2',
+    description: 'Description for Repository 2',
+    codeEditorLink: 'link-to-repo-2',
+  },
+  // Add more repositories as needed
+];
+
+const itemsPerPage = 9;
+
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(' ');
 }
 
 export default function Dashboard() {
-  const [auth] = UseAuth();
-  const [openCreateRepo, setOpenCreateRepo] = useState(false);
-  const [repos, setRepos] = useState();
-  const [loading, setLoading] = useState(false);
-  const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(1);
-  const navigate = useNavigate();
-  const Host = "http://localhost:4000"
+  const [openRepo, setOpenRepo] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [openCreateRepo, setOpenCreateRepo] = useState(false)
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedRepositories = repositories.slice(startIndex, endIndex);
 
-  const itemsPerPage = 6;
-  const totalPages = Math.ceil(total / itemsPerPage);
+  const totalPages = Math.ceil(repositories.length / itemsPerPage);
 
-
-  const getAllRepos = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(`${Host}/api/repo/repo-list/${page}`);
-      setRepos(data.Repos);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-    }
-  };
-  
-  //getTotal COunt
-  const getTotal = async () => {
-    try {
-      const { data } = await axios.get(`${Host}/api/repo/repo-count`);
-      setTotal(data?.total);
-    } catch (error) {
-      console.log(error);
-    }
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
   };
 
-  useEffect(() => {
-    if (page === 1) return;
-    loadMore();
-  }, [page]);
-  //load more
-  const loadMore = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(`${Host}/api/repo/repo-list/${page}`);
-      setLoading(false);
-      setRepos([...repos, ...data?.Repos]);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getAllRepos();
-    getTotal();
-  }, [auth])
-
-  const handleNextPage = () => {
-    if (page < totalPages) {
-      setPage(page + 1);
-    }
-  };
-  
-  const handlePrevPage = () => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
-  };
-  
-
-  // const handleRepoClick=(value){
-
-  // }
-  const handleNewFile = () => {
+  const handleCreateRepo=()=>{
     setOpenCreateRepo(true)
   }
 
-  const handleLogout = () => {
-    localStorage.setItem('CodeMagic', '');
-    toast.success("Logout successfully")
-    navigate('/')
-  }
   return (
     <>
-      <div className="min-h-full">
-        <Disclosure as="nav" className="bg-gray-800">
-          {({ open }) => (
-            <>
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="flex h-16 items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <svg className='ms-3 mt-1 stroke-black' xmlns="http://www.w3.org/2000/svg" width="48.237" height="48.464" id="visual-studio-code"><path fill="#0179cb" d="M17.172 29.664 5.215 38.981 0 36.384V12.1l5.195-2.617 11.874 9.338L35.869 0l12.368 4.927v38.528l-12.306 5.009ZM35.5 32.942V15.523l-11.255 8.72ZM5.628 29.808l5.916-5.38-5.916-5.9Z" data-name="visual studio code"></path></svg>
-                    </div>
-                    <div className="hidden md:block">
-                      <div className="ml-10 flex items-baseline space-x-4">
-                        {navigation.map((item) => (
-                          <a
-                            key={item.name}
-                            href={item.href}
-                            className={classNames(
-                              item.current
-                                ? 'bg-gray-900 text-white'
-                                : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                              'rounded-md px-3 py-2 text-sm font-medium'
-                            )}
-                            aria-current={item.current ? 'page' : undefined}
-                          >
-                            {item.name}
-                          </a>
-                        ))}
-                        <Menu as="div" className="relative ml-3">
-                          <div>
-                            <Menu.Button className="
-                              
-                                'bg-gray-900 text-white
-                             hover:bg-gray-700 hover:text-white
-                              rounded-md px-3 py-2 text-sm font-medium"
-                            >
-                              <span className="absolute -inset-1.5" />
-                              <span className=' text-white'>File</span>
-                            </Menu.Button>
-                          </div>
-                          <Transition
-                            as={Fragment}
-                            enter="transition ease-out duration-100"
-                            enterFrom="transform opacity-0 scale-95"
-                            enterTo="transform opacity-100 scale-100"
-                            leave="transition ease-in duration-75"
-                            leaveFrom="transform opacity-100 scale-100"
-                            leaveTo="transform opacity-0 scale-95"
-                          >
-                            <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-
-                              <Menu.Item key="profile">
-                                {({ active }) => (
-                                  <NavLink
-                                    onClick={handleNewFile}
-                                    className={classNames(
-                                      active ? 'bg-gray-100' : '',
-                                      'block px-4 py-2 text-sm text-gray-700'
-                                    )}
-                                  >
-                                    new file
-
-                                  </NavLink>
-                                )}
-                              </Menu.Item>
-                            </Menu.Items>
-                          </Transition>
-                        </Menu>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="hidden md:block">
-                    <div className="ml-4 flex items-center md:ml-6">
-                      <button
-                        type="button"
-                        className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                      >
-                        <span className="absolute -inset-1.5" />
-                        <span className="sr-only">View notifications</span>
-                        <BellIcon className="h-6 w-6" aria-hidden="true" />
-                      </button>
-
-                      {/* Profile dropdown */}
-                      <Menu as="div" className="relative ml-3">
-                        <div>
-                          <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                            <span className="absolute -inset-1.5" />
-                            <span className="sr-only">Open user menu</span>
-                            <img className="h-8 w-8 rounded-full" src="/images/coding.png" alt="" />
-                          </Menu.Button>
-                        </div>
-                        <Transition
-                          as={Fragment}
-                          enter="transition ease-out duration-100"
-                          enterFrom="transform opacity-0 scale-95"
-                          enterTo="transform opacity-100 scale-100"
-                          leave="transition ease-in duration-75"
-                          leaveFrom="transform opacity-100 scale-100"
-                          leaveTo="transform opacity-0 scale-95"
-                        >
-                          <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-
-                            <Menu.Item key="profile">
-                              {({ active }) => (
-                                <NavLink
-                                  to="/user/profile"
-                                  className={classNames(
-                                    active ? 'bg-gray-100' : '',
-                                    'block px-4 py-2 text-sm text-gray-700'
-                                  )}
-                                >
-                                  profile
-                                </NavLink>
-                              )}
-                            </Menu.Item>
-                            <Menu.Item key="logout">
-                              {({ active }) => (
-                                <NavLink
-                                  onClick={handleLogout}
-                                  className={classNames(
-                                    active ? 'bg-gray-100' : '',
-                                    'block px-4 py-2 text-sm text-gray-700'
-                                  )}
-                                >
-                                  logout
-                                </NavLink>
-                              )}
-                            </Menu.Item>
-                          </Menu.Items>
-                        </Transition>
-                      </Menu>
-                    </div>
-                  </div>
-                  <div className="-mr-2 flex md:hidden">
-                    {/* Mobile menu button */}
-                    <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                      <span className="absolute -inset-0.5" />
-                      <span className="sr-only">Open main menu</span>
-                      {open ? (
-                        <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
-                      ) : (
-                        <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
-                      )}
-                    </Disclosure.Button>
-                  </div>
-                </div>
-              </div>
-
-              <Disclosure.Panel className="md:hidden">
-                <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-                  {navigation.map((item) => (
-                    <Disclosure.Button
-                      key={item.name}
-                      as="a"
-                      href={item.href}
-                      className={classNames(
-                        item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                        'block rounded-md px-3 py-2 text-base font-medium'
-                      )}
-                      aria-current={item.current ? 'page' : undefined}
-                    >
-                      {item.name}
-                    </Disclosure.Button>
-                  ))}
-                </div>
-                <div className="border-t border-gray-700 pb-3 pt-4">
-                  <div className="flex items-center px-5">
-                    <div className="flex-shrink-0">
-                      <img className="h-10 w-10 rounded-full" src="/images/coding.png" alt="user" />
-                    </div>
-                    <div className="ml-3">
-                      <div className="text-base font-medium leading-none text-white">{auth?.user?.name}</div>
-                      <div className="text-sm font-medium leading-none text-gray-400">{auth?.user?.email}</div>
-                    </div>
-                    <button
-                      type="button"
-                      className="relative ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                    >
-                      <span className="absolute -inset-1.5" />
-                      <span className="sr-only">View notifications</span>
-                      <BellIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
-                  </div>
-                  <div className="mt-3 space-y-1 px-2">
-                    {userNavigation.map((item) => (
-                      <Disclosure.Button
-                        key={item.name}
-                        as="a"
-                        href={item.href}
-                        className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                      >
-                        {item.name}
-                      </Disclosure.Button>
-                    ))}
-                  </div>
-                </div>
-              </Disclosure.Panel>
-            </>
-          )}
-        </Disclosure>
-        <CreateRepoModal openCreateRepo={openCreateRepo} />
-        <main className="bg-gray-200">
-          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {repos?.map((repo) => (
-                <div
-                  key={repo.id}
-                  className="bg-white hover:bg-red-300 p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:scale-105 cursor-pointer"
-                >
-                  <h2 className="text-xl font-semibold">{repo.name}</h2>
-                  <p className="text-gray-600 mt-2">{repo.description}</p>
-                </div>
-              ))}
-            </div>
-            {repos && repos.length < total && (
-              <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-              <a
-                href="#"
-                onClick={handlePrevPage}
-                className={`relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0 ${
-                  page === 1 ? 'cursor-not-allowed pointer-events-none' : ''
-                }`}
-              >
-                <span className="sr-only">Previous</span>
-                <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-              </a>
-              {Array.from({ length: totalPages }).map((_, index) => (
-                <a
-                  key={index + 1}
-                  href="#"
-                  onClick={() => setPage(index + 1)}
-                  className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${
-                    page === index + 1 ? 'bg-indigo-600 text-white' : ''
-                  }`}
-                >
-                  {index + 1}
-                </a>
-              ))}
-              <a
-                href="#"
-                onClick={handleNextPage}
-                className={`relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0 ${
-                  page === totalPages ? 'cursor-not-allowed pointer-events-none' : ''
-                }`}
-              >
-                <span className="sr-only">Next</span>
-                <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-              </a>
-            </nav>
-
-            
-            
-            )}
+      <div className="min-h-screen flex flex-col md:flex-row">
+        {/* Side Panel */}
+        <aside className="w-full md:w-64 bg-gray-900 text-white h-16 md:h-screen">
+          <div className="p-4">
+            <h2 className="text-xl md:text-2xl font-semibold">{user.name}</h2>
+            <p className="text-gray-400">{user.email}</p>
           </div>
-        </main>
+          <nav className="mt-4">
+  
+              <a
+                key="1"
+                href="/"
+                className="block px-4 py-2 hover:bg-gray-800"
+              >
+                Profile
+              </a>
+              <a
+                key="2"
+                href="/"
+                className="block px-4 py-2 hover:bg-gray-800"
+              >
+                Logout
+              </a>
+              <NavLink
+                key="3"
+                onClick={handleCreateRepo}
+                className="block px-4 py-2 hover:bg-gray-800"
+              >
+                Create Repo
+              </NavLink>
+            
+          </nav>
+        </aside>
 
+        {/* Main Content */}
+        <CreateRepoModal openCreateRepo={openCreateRepo}/>
+        <main className="flex-1 p-1">
+          {/* Top Header */}
+          <header className="bg-white shadow p-4">
+            <div className="mx-auto">
+              <h1 className="text-sm md:text-sm font-bold tracking-tight text-gray-900">Dashboard</h1>
+            </div>
+          </header>
+
+          {/* Repository List */}
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+            {paginatedRepositories.map((repo) => (
+              <div key={repo.name} className="bg-gray-200 p-4 rounded-lg">
+                <h2 className="text-md md:text-xl font-semibold">{repo.name}</h2>
+                <p className="text-gray-600">{repo.description}</p>
+                <button
+                  onClick={() => setOpenRepo(repo)}
+                  className="mt-2 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-700"
+                >
+                  Open in Code Editor
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Pagination */}
+          <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+      <div className="flex flex-1 justify-between sm:hidden">
+        <a
+          href="#"
+          className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+        >
+          Previous
+        </a>
+        <a
+          href="#"
+          className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+        >
+          Next
+        </a>
       </div>
+      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+        <div>
+          <p className="text-sm text-gray-700">
+            Showing <span className="font-medium">1</span> to <span className="font-medium">10</span> of{' '}
+            <span className="font-medium">97</span> results
+          </p>
+        </div>
+        <div>
+          <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+            <a
+              href="#"
+              className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+            >
+              <span className="sr-only">Previous</span>
+              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+            </a>
+            {/* Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" */}
+            <a
+              href="#"
+              aria-current="page"
+              className="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              1
+            </a>
+            <a
+              href="#"
+              className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+            >
+              2
+            </a>
+            <a
+              href="#"
+              className="relative hidden items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex"
+            >
+              3
+            </a>
+            <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 focus:outline-offset-0">
+              ...
+            </span>
+            <a
+              href="#"
+              className="relative hidden items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex"
+            >
+              8
+            </a>
+            <a
+              href="#"
+              className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+            >
+              9
+            </a>
+            <a
+              href="#"
+              className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+            >
+              10
+            </a>
+            <a
+              href="#"
+              className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+            >
+              <span className="sr-only">Next</span>
+              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+            </a>
+          </nav>
+        </div>
+      </div>
+    </div>
+         
+        </main>
+      </div>
+
+      {/* Code Editor Modal */}
+      {openRepo && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white w-3/4 md:w-1/2 lg:w-1/3 rounded-lg p-4">
+            <h2 className="text-md md:text-xl font-semibold">{openRepo.name}</h2>
+            <p className="text-gray-600">{openRepo.description}</p>
+            <a
+              href="/code-editor"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+            >
+              Open in Code Editor
+            </a>
+            <button
+              onClick={() => setOpenRepo(null)}
+              className="mt-2 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </>
-  )
+  );
 }
