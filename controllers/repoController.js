@@ -55,10 +55,8 @@ export const getRepoController = async (req, res) => {
 // get single Repo
 export const getSingleRepoController = async (req, res) => {
     try {
-        const Repo = await RepoModel
-            .findOne({ slug: req.params.slug })
-            .select("-photo")
-            .populate("category");
+        const Repo = await repoModel
+            .findOne({ _id: req.params.rid })
         res.status(200).send({
             success: true,
             message: "Single Repo Fetched",
@@ -76,7 +74,7 @@ export const getSingleRepoController = async (req, res) => {
 //delete controller
 export const deleteRepoController = async (req, res) => {
     try {
-        await RepoModel.findByIdAndDelete(req.params.pid).select("-photo");
+        await repoModel.findByIdAndDelete(req.params.pid).select("-photo");
         res.status(200).send({
             success: true,
             message: "Repo Deleted successfully",
@@ -93,36 +91,13 @@ export const deleteRepoController = async (req, res) => {
 //upate Repo
 export const updateRepoController = async (req, res) => {
     try {
-        const { name, description, price, category, quantity, shipping } =
-            req.fields;
-        const { photo } = req.files;
-        //Validation
-        switch (true) {
-            case !name:
-                return res.status(500).send({ error: "Name is Required" });
-            case !description:
-                return res.status(500).send({ error: "Description is Required" });
-            case !price:
-                return res.status(500).send({ error: "Price is Required" });
-            case !category:
-                return res.status(500).send({ error: "Category is Required" });
-            case !quantity:
-                return res.status(500).send({ error: "Quantity is Required" });
-            case photo && photo.size > 1000000:
-                return res
-                    .status(500)
-                    .send({ error: "photo is Required and should be less then 1mb" });
-        }
+        const { HTML, CSS, JS } = req.body;
 
-        const Repos = await RepoModel.findByIdAndUpdate(
+        const Repos = await repoModel.findByIdAndUpdate(
             req.params.pid,
-            { ...req.fields, slug: slugify(name) },
+            { ...req.body },
             { new: true }
         );
-        if (photo) {
-            Repos.photo.data = fs.readFileSync(photo.path);
-            Repos.photo.contentType = photo.type;
-        }
         await Repos.save();
         res.status(201).send({
             success: true,
@@ -145,7 +120,7 @@ export const RepoFiltersController = async (req, res) => {
         let args = {};
         if (checked.length > 0) args.category = checked;
         if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] };
-        const Repos = await RepoModel.find(args);
+        const Repos = await repoModel.find(args);
         res.status(200).send({
             success: true,
             Repos,
@@ -159,16 +134,26 @@ export const RepoFiltersController = async (req, res) => {
     }
 };
 
-// Repo count
 export const RepoCountController = async (req, res) => {
     try {
-        const total = await repoModel.find({}).estimatedDocumentCount();
+        // Assuming you receive the owner ID in the query parameters
+        const ownerId = req.params.ownerId;
+
+        if (!ownerId) {
+            return res.status(400).send({
+                success: false,
+                message: "Owner ID is required",
+            });
+        }
+
+        const total = await repoModel.countDocuments({ owner: ownerId });
+
         res.status(200).send({
             success: true,
             total,
         });
     } catch (error) {
-        res.status(400).send({
+        res.status(500).send({
             message: "Error in Repo count",
             error,
             success: false,
@@ -176,34 +161,80 @@ export const RepoCountController = async (req, res) => {
     }
 };
 
+
 // Repo list base on page
+// export const RepoListController = async (req, res) => {
+//     try {
+//         const limit = 9;
+//         const page = req.params.page ? req.params.page : 1;
+//         const startIndex = (page - 1) * limit;
+//         const endIndex = limit;
+//         const options = {
+//             // sort returned documents in ascending order by date created
+//             sort: { createdAt: -1 },
+//             projection: { _id: 1, name: 1, description: 1 },
+//         };
+//         const Repos = await repoModel
+//             .find(options)
+//             .skip(startIndex)
+//             .limit(endIndex);
+//         res.status(200).send({
+//             success: true,
+//             Repos,
+//         });
+//     } catch (error) {
+//         res.status(400).send({
+//             success: false,
+//             message: "error in per page ctrl",
+//             error,
+//         });
+//     }
+// };
+
 export const RepoListController = async (req, res) => {
     try {
         const limit = 9;
-        const page = req.params.page ? req.params.page : 1;
+        const page = req.query.page ? req.query.page : 1;
         const startIndex = (page - 1) * limit;
         const endIndex = limit;
+
+        // Assuming you receive the owner ID in the request query parameters
+        const ownerId = req.query.ownerId;
+
+        if (!ownerId) {
+            return res.status(400).send({
+                success: false,
+                message: "Owner ID is required",
+            });
+        }
+
         const options = {
-            // sort returned documents in ascending order by date created
-            sort: { createdAt: -1 },
-            projection: { _id: 1, name: 1, description: 1 },
+            // Add a filter for owner ID
+            owner: ownerId,
         };
+
+        // Modify the projection to include the desired fields
+        const projection = { _id: 1, name: 1, description: 1 };
+
         const Repos = await repoModel
             .find(options)
+            .select(projection)
             .skip(startIndex)
             .limit(endIndex);
+
         res.status(200).send({
             success: true,
             Repos,
         });
     } catch (error) {
-        res.status(400).send({
+        res.status(500).send({
             success: false,
-            message: "error in per page ctrl",
+            message: "Error in retrieving repositories",
             error,
         });
     }
 };
+
 
 // search Repo
 export const searchRepoController = async (req, res) => {

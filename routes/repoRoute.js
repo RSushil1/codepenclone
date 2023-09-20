@@ -13,13 +13,13 @@ import {requireSignIn } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-//routes
+//Create repo
 router.post(
   "/create-Repo",
   requireSignIn,
   createRepoController
 );
-//routes
+//Update Repo
 router.put(
   "/update-Repo/:pid",
   requireSignIn,
@@ -37,10 +37,10 @@ router.delete("/delete-Repo/:rid", deleteRepoController);
 
 
 //Repo per page
-router.get("/Repo-list/:page", RepoListController);
+router.get("/Repo-list", RepoListController);
 
 //Repo per page
-router.get("/Repo-count", RepoCountController);
+router.get("/Repo-count/:ownerId", RepoCountController);
 
 //search Repo
 router.get("/search/:keyword", searchRepoController);
