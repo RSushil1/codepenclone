@@ -1,22 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
+import { ChevronLeftIcon, ChevronRightIcon,UserCircleIcon,ArrowRightOnRectangleIcon } from '@heroicons/react/20/solid'
 import CreateRepoModal from './../components/CreateRepoModal';
-import {NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { UseAuth } from '../context/auth';
-
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-};
-
-const itemsPerPage = 9;
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
 
 export default function Dashboard() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -83,7 +71,7 @@ export default function Dashboard() {
     setCurrentPage(value)
   };
 
-  const handleOpenRepo = (value)=>{
+  const handleOpenRepo = (value) => {
     navigate(`/code-editor?id=${value}`)
   }
 
@@ -103,18 +91,21 @@ export default function Dashboard() {
         {/* Side Panel */}
         <aside className="w-full md:w-64 bg-gray-900 text-white h-16 md:h-screen">
           <div className="p-4">
-            <h2 className="text-xl md:text-2xl font-semibold">{user.name}</h2>
-            <p className="text-gray-400">{user.email}</p>
+            <h2 className="text-xl md:text-2xl font-semibold">{auth?.user.name}</h2>
+            <p className="text-gray-400">{auth?.user.email}</p>
           </div>
           <nav className="mt-4">
-
+            <div className='flex flex-row m-5'>
+            <UserCircleIcon className="h-8 w-8 text-green-600" aria-hidden="true"/>
             <NavLink
-              key="1"
-              href="/"
+              type="button"
               className="block px-4 py-2 hover:bg-gray-800"
             >
               Profile
             </NavLink>
+            </div>
+            <div className='flex flex-row m-5'>
+            <ArrowRightOnRectangleIcon className="h-8 w-8 text-green-600" aria-hidden="true"/>
             <button
               onClick={() => {
                 handleLogout();
@@ -124,10 +115,10 @@ export default function Dashboard() {
             >
               Logout
             </button>
-
+            </div>
             <CreateRepoModal />
-
           </nav>
+
         </aside>
 
         {/* Main Content */}
@@ -144,7 +135,7 @@ export default function Dashboard() {
             {repositories?.map((repo) => (
               <div key={repo.name} className="bg-gray-200 p-4 rounded-lg">
                 <h2 className="text-md md:text-xl font-semibold">{repo.name}</h2>
-                <p className="text-gray-600">{repo.description}</p>
+                <p className="text-gray-600 overflow-hidden whitespace-nowrap overflow-ellipsis">{repo.description}</p>
                 <button
                   onClick={() => handleOpenRepo(repo._id)}
                   className="mt-2 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-700"
