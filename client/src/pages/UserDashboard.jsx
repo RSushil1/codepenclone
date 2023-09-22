@@ -15,7 +15,7 @@ export default function Dashboard() {
   const ownerId = auth?.user?._id
   const navigate = useNavigate();
 
-  const Host = "http://localhost:4000"
+  const Host = "https://codemagicapp.vercel.app"
 
   let pages = Math.ceil(total / 9);
 

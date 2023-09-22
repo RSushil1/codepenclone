@@ -7,7 +7,7 @@ import Spinner from "../components/Spinner";
 const PrivateRoute = () => {
   const [ok, setOk] = useState(false);
   const [auth] = UseAuth();
-  const Host = "http://localhost:4000"
+  const Host = "https://codemagicapp.vercel.app"
 
   useEffect(() => {
     const authCheck = async () => {

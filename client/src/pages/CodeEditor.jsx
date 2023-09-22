@@ -26,7 +26,7 @@ const CodeEditor = () => {
     const searchParams = new URLSearchParams(location.search);
     const repoId = searchParams.get('id');
 
-    const Host = "http://localhost:4000"
+    const Host = "https://codemagicapp.vercel.app"
 
     const getRepo = async () => {
         try {

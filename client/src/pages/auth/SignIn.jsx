@@ -9,7 +9,7 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
   const [auth, setAuth] = UseAuth();
   const navigate = useNavigate();
-  const Host = "http://localhost:4000"
+  const Host = "https://codemagicapp.vercel.app"
 
   // form function
   const handleSubmit = async (e) => {

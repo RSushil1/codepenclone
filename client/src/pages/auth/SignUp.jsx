@@ -11,7 +11,7 @@ const Signup = () => {
     const [question, setQuestion] = useState('');
 
     const navigate = useNavigate();
-    const Host = 'http://localhost:4000';
+    const Host = "https://codemagicapp.vercel.app"
 
     // form function
     const handleSubmit = async (e) => {
