@@ -39,7 +39,7 @@ router.delete("/delete-Repo/:rid", deleteRepoController);
 //Repo per page
 router.get("/Repo-list", RepoListController);
 
-//Repo per page
+//Repo counting
 router.get("/Repo-count/:ownerId", RepoCountController);
 
 //search Repo

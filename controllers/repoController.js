@@ -71,7 +71,7 @@ export const getSingleRepoController = async (req, res) => {
     }
 };
 
-//delete controller
+//delete repo
 export const deleteRepoController = async (req, res) => {
     try {
         await repoModel.findByIdAndDelete(req.params.rid);
@@ -114,30 +114,9 @@ export const updateRepoController = async (req, res) => {
     }
 };
 
-// filters
-export const RepoFiltersController = async (req, res) => {
-    try {
-        const { checked, radio } = req.body;
-        let args = {};
-        if (checked.length > 0) args.category = checked;
-        if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] };
-        const Repos = await repoModel.find(args);
-        res.status(200).send({
-            success: true,
-            Repos,
-        });
-    } catch (error) {
-        res.status(400).send({
-            success: false,
-            message: "Error WHile Filtering Repos",
-            error,
-        });
-    }
-};
-
+//repo counting
 export const RepoCountController = async (req, res) => {
     try {
-        // Assuming you receive the owner ID in the query parameters
         const ownerId = req.params.ownerId;
 
         if (!ownerId) {
@@ -162,15 +141,13 @@ export const RepoCountController = async (req, res) => {
     }
 };
 
-
+//repo pagination
 export const RepoListController = async (req, res) => {
     try {
         const limit = 9;
         const page = req.query.page ? req.query.page : 1;
         const startIndex = (page - 1) * limit;
         const endIndex = limit;
-
-        // Assuming you receive the owner ID in the request query parameters
         const ownerId = req.query.ownerId;
 
         if (!ownerId) {
@@ -184,8 +161,6 @@ export const RepoListController = async (req, res) => {
             // Add a filter for owner ID
             owner: ownerId,
         };
-
-        // Modify the projection to include the desired fields
         const projection = { _id: 1, name: 1, description: 1 };
 
         const Repos = await repoModel
@@ -230,29 +205,5 @@ export const searchRepoController = async (req, res) => {
     }
 };
 
-// similar Repos
-export const realtedRepoController = async (req, res) => {
-    try {
-        const { pid, cid } = req.params;
-        const Repos = await RepoModel
-            .find({
-                category: cid,
-                _id: { $ne: pid },
-            })
-            .select("-photo")
-            .limit(6)
-            .populate("category");
-        res.status(200).send({
-            success: true,
-            Repos,
-        });
-    } catch (error) {
-        res.status(400).send({
-            success: false,
-            message: "error while geting related Repo",
-            error,
-        });
-    }
-};
 
 
