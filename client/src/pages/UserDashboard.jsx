@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { ChevronLeftIcon, ChevronRightIcon,UserCircleIcon,ArrowRightOnRectangleIcon } from '@heroicons/react/20/solid'
+import { ChevronLeftIcon, ChevronRightIcon, UserCircleIcon, ArrowRightOnRectangleIcon, Bars3Icon } from '@heroicons/react/20/solid'
 import CreateRepoModal from './../components/CreateRepoModal';
 import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { UseAuth } from '../context/auth';
+import UpdateRepoModal from '../components/UpdateRepoModal';
 
 export default function Dashboard() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -96,25 +97,25 @@ export default function Dashboard() {
           </div>
           <nav className="mt-4">
             <div className='flex flex-row m-5'>
-            <UserCircleIcon className="h-8 w-8 text-green-600" aria-hidden="true"/>
-            <NavLink
-              type="button"
-              className="block px-4 py-2 hover:bg-gray-800"
-            >
-              Profile
-            </NavLink>
+              <UserCircleIcon className="h-8 w-8 text-green-600" aria-hidden="true" />
+              <NavLink
+                type="button"
+                className="block px-4 py-2 hover:bg-gray-800"
+              >
+                Profile
+              </NavLink>
             </div>
             <div className='flex flex-row m-5'>
-            <ArrowRightOnRectangleIcon className="h-8 w-8 text-green-600" aria-hidden="true"/>
-            <button
-              onClick={() => {
-                handleLogout();
-                navigate('/');
-              }}
-              className="block px-4 py-2 hover:bg-gray-800"
-            >
-              Logout
-            </button>
+              <ArrowRightOnRectangleIcon className="h-8 w-8 text-green-600" aria-hidden="true" />
+              <button
+                onClick={() => {
+                  handleLogout();
+                  navigate('/');
+                }}
+                className="block px-4 py-2 hover:bg-gray-800"
+              >
+                Logout
+              </button>
             </div>
             <CreateRepoModal />
           </nav>
@@ -126,22 +127,27 @@ export default function Dashboard() {
           {/* Top Header */}
           <header className="bg-white shadow p-4">
             <div className="mx-auto">
-              <h1 className="text-sm md:text-sm font-bold tracking-tight text-gray-900">Dashboard</h1>
+              <h1 className="text-lg md:text-lg font-bold tracking-tight text-gray-900">Dashboard</h1>
             </div>
           </header>
 
           {/* Repository List */}
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
             {repositories?.map((repo) => (
-              <div key={repo.name} className="bg-gray-200 p-4 rounded-lg">
-                <h2 className="text-md md:text-xl font-semibold">{repo.name}</h2>
-                <p className="text-gray-600 overflow-hidden whitespace-nowrap overflow-ellipsis">{repo.description}</p>
-                <button
-                  onClick={() => handleOpenRepo(repo._id)}
-                  className="mt-2 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-700"
-                >
-                  Open in Code Editor
-                </button>
+              <div key={repo.name} className="bg-gray-200 p-4 rounded-lg relative">
+                <div className='absolute top-0 right-0 p-5'>
+                  <UpdateRepoModal Id={repo._id}/>
+                </div>
+                <div>
+                  <h2 className="text-md md:text-xl font-semibold">{repo.name}</h2>
+                  <p className="text-gray-600 overflow-hidden whitespace-nowrap overflow-ellipsis">{repo.description}</p>
+                  <button
+                    onClick={() => handleOpenRepo(repo._id)}
+                    className="mt-2 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-700"
+                  >
+                    Open in Code Editor
+                  </button>
+                </div>
               </div>
             ))}
           </div>

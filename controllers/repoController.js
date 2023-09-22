@@ -74,7 +74,7 @@ export const getSingleRepoController = async (req, res) => {
 //delete controller
 export const deleteRepoController = async (req, res) => {
     try {
-        await repoModel.findByIdAndDelete(req.params.pid).select("-photo");
+        await repoModel.findByIdAndDelete(req.params.rid);
         res.status(200).send({
             success: true,
             message: "Repo Deleted successfully",
@@ -88,10 +88,11 @@ export const deleteRepoController = async (req, res) => {
     }
 };
 
+
 //upate Repo
 export const updateRepoController = async (req, res) => {
     try {
-        const { HTML, CSS, JS } = req.body;
+        const { name, description, HTML, CSS, JS } = req.body;
 
         const Repos = await repoModel.findByIdAndUpdate(
             req.params.pid,
@@ -161,35 +162,6 @@ export const RepoCountController = async (req, res) => {
     }
 };
 
-
-// Repo list base on page
-// export const RepoListController = async (req, res) => {
-//     try {
-//         const limit = 9;
-//         const page = req.params.page ? req.params.page : 1;
-//         const startIndex = (page - 1) * limit;
-//         const endIndex = limit;
-//         const options = {
-//             // sort returned documents in ascending order by date created
-//             sort: { createdAt: -1 },
-//             projection: { _id: 1, name: 1, description: 1 },
-//         };
-//         const Repos = await repoModel
-//             .find(options)
-//             .skip(startIndex)
-//             .limit(endIndex);
-//         res.status(200).send({
-//             success: true,
-//             Repos,
-//         });
-//     } catch (error) {
-//         res.status(400).send({
-//             success: false,
-//             message: "error in per page ctrl",
-//             error,
-//         });
-//     }
-// };
 
 export const RepoListController = async (req, res) => {
     try {

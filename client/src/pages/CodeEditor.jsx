@@ -55,7 +55,7 @@ const CodeEditor = () => {
         const lines = jsCode?.split('\n');
 
         // Execute each line individually
-        lines.forEach((line, lineNumber) => {
+        lines?.forEach((line, lineNumber) => {
             try {
                 const iframe = document.querySelector('iframe');
                 const iframeWindow = iframe.contentWindow;
