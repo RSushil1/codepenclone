@@ -12,7 +12,7 @@ export default function CreateRepoModal() {
     const [name, setName] = useState();
     const [description, setDescription] = useState();
     const owner = auth?.user._id;
-    const Host = "http://localhost:4000"
+    const Host = "https://codemagicapp.vercel.app"
 
     let [isOpen, setIsOpen] = useState(false);
 

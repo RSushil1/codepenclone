@@ -12,7 +12,7 @@ export default function UpdateRepoModal(props) {
     const [auth, setAuth] = UseAuth();
     const [name, setName] = useState();
     const [description, setDescription] = useState();
-    const Host = "http://localhost:4000"
+    const Host = "https://codemagicapp.vercel.app"
 
     let [isOpen, setIsOpen] = useState(false);
 
