@@ -108,6 +108,9 @@ export default function SignIn() {
               SignUp
             </NavLink>
           </p>
+          <p className="mt-10 text-center text-sm text-gray-500">
+            For Test Purpose Use: Email- a@a.a and Password- 123
+          </p>
         </div>
       </div>
     </>
